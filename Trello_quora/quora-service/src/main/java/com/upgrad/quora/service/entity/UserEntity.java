@@ -5,16 +5,21 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "USERS", schema = "quora")
-public class UserEntity {
+public class UserEntity implements Serializable {
 
     @Id
     @Column(name = "ID")
@@ -22,32 +27,32 @@ public class UserEntity {
     private long id;
 
     @Column(name = "UUID")
-    @Size(max = 64)
+    @Size(max = 200)
     private String uuid;
 
     @Column(name = "FIRST_NAME")
     @NotNull
-    @Size(max = 200)
+    @Size(max = 30)
     private String firstName;
 
     @Column(name = "LAST_NAME")
     @NotNull
-    @Size(max = 200)
+    @Size(max = 30)
     private String lastName;
-
 
     @Column(name = "USERNAME")
     @NotNull
-    @Size(max = 200)
+    @Size(max = 30)
     private String userName;
 
     @Column(name = "EMAIL")
     @NotNull
-    @Size(max = 200)
+    @Size(max = 50)
     private String email;
 
     @Column(name = "PASSWORD")
     @NotNull
+    @Size(max = 225)
     private String password;
 
     @Column(name = "SALT")
@@ -56,10 +61,11 @@ public class UserEntity {
     private String salt;
 
     @Column(name = "COUNTRY")
+    @Size(max = 30)
     private String country;
 
     @Column(name = "ABOUT_ME")
-    @Size(max = 500)
+    @Size(max = 50)
     private String aboutMe;
 
     @Column(name = "DATE OF BIRTH")
@@ -68,12 +74,17 @@ public class UserEntity {
     private Date dateOfBirth;
 
     @Column(name = "ROLE")
+    @Size(max = 30)
     private String role;
 
     @Column(name = "MOBILE NUMBER")
     @NotNull
-    @Size(max = 20)
+    @Size(max = 30)
     private String contactNumber;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<QuestionEntity> questionEntities = new ArrayList<>();
 
     public long getId() {
         return id;
@@ -185,5 +196,4 @@ public class UserEntity {
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
     }
-
 }
