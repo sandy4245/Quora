@@ -19,6 +19,12 @@ import java.util.List;
 
 @Entity
 @Table(name = "USERS", schema = "quora")
+@NamedQueries(
+        {
+                @NamedQuery(name = "userByUuid", query = "select u from UserEntity u where u.uuid = :uuid")
+        }
+)
+
 public class UserEntity implements Serializable {
 
     @Id
@@ -68,9 +74,11 @@ public class UserEntity implements Serializable {
     @Size(max = 50)
     private String aboutMe;
 
-    @Column(name = "DATE OF BIRTH")
-    @NotNull
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+//    @Column(name = "DATE OF BIRTH")
+//    @NotNull
+//    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @Column(name = "dob")
+    @Size(max = 30)
     private Date dateOfBirth;
 
     @Column(name = "ROLE")
@@ -116,6 +124,22 @@ public class UserEntity implements Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public List<QuestionEntity> getQuestionEntities() {
+        return questionEntities;
+    }
+
+    public void setQuestionEntities(List<QuestionEntity> questionEntities) {
+        this.questionEntities = questionEntities;
     }
 
     public String getEmail() {
