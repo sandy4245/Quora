@@ -33,7 +33,7 @@ public class CommonController {
                 .aboutMe(userDetails.getAboutMe())
                 .country(userDetails.getCountry())
                 .contactNumber(userDetails.getContactNumber())
-                .dob(String.valueOf(userDetails.getDateOfBirth()));
+                .dob(String.valueOf(userDetails.getDob()));
 
         return new ResponseEntity<UserDetailsResponse>(userDetailsResponse, HttpStatus.OK);
     }
