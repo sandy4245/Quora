@@ -1,98 +1,100 @@
 package com.upgrad.quora.service.entity;
 
-
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.lang3.builder.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Entity
-@Table(name = "USERS", schema = "quora")
+@Table(name = "USERS")
 @NamedQueries(
         {
-                @NamedQuery(name = "userByUuid", query = "select u from UserEntity u where u.uuid = :uuid")
+                @NamedQuery(name = "userByUuid", query = "select ue from UserEntity ue where ue.uuid = :uuid")
         }
 )
-
 public class UserEntity implements Serializable {
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "UUID")
+    @Column(name = "uuid")
+    @NotNull
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @Size(max = 200)
     private String uuid;
 
-    @Column(name = "FIRST_NAME")
+    @Column(name = "firstname")
     @NotNull
     @Size(max = 30)
     private String firstName;
 
-    @Column(name = "LAST_NAME")
+    @Column(name = "lastname")
     @NotNull
     @Size(max = 30)
     private String lastName;
 
-    @Column(name = "USERNAME")
+    @Column(name = "username")
     @NotNull
     @Size(max = 30)
     private String userName;
 
-    @Column(name = "EMAIL")
+    @Column(name = "email")
     @NotNull
     @Size(max = 50)
     private String email;
 
-    @Column(name = "PASSWORD")
+    @Column(name = "password")
+    @ToStringExclude
     @NotNull
-    @Size(max = 225)
+    @Size(max = 255)
     private String password;
 
-    @Column(name = "SALT")
+    @Column(name = "salt")
+    @ToStringExclude
     @NotNull
     @Size(max = 200)
     private String salt;
 
-    @Column(name = "COUNTRY")
+    @Column(name = "country")
     @Size(max = 30)
     private String country;
 
-    @Column(name = "ABOUT_ME")
+    @Column(name = "aboutme")
     @Size(max = 50)
     private String aboutMe;
 
-//    @Column(name = "DATE OF BIRTH")
-//    @NotNull
-//    @DateTimeFormat(pattern = "dd/MM/yyyy")
     @Column(name = "dob")
     @Size(max = 30)
-    private Date dateOfBirth;
+    private String dob;
 
-    @Column(name = "ROLE")
+    @Column(name = "role")
     @Size(max = 30)
     private String role;
 
-    @Column(name = "MOBILE NUMBER")
-    @NotNull
+    @Column(name = "contactnumber")
     @Size(max = 30)
     private String contactNumber;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<QuestionEntity> questionEntities = new ArrayList<>();
+    @Override
+    public boolean equals(Object obj) {
+        return new EqualsBuilder().append(this, obj).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().append(this).hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+    }
 
     public long getId() {
         return id;
@@ -132,14 +134,6 @@ public class UserEntity implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public List<QuestionEntity> getQuestionEntities() {
-        return questionEntities;
-    }
-
-    public void setQuestionEntities(List<QuestionEntity> questionEntities) {
-        this.questionEntities = questionEntities;
     }
 
     public String getEmail() {
@@ -182,12 +176,12 @@ public class UserEntity implements Serializable {
         this.aboutMe = aboutMe;
     }
 
-    public Date getDateOfBirth() {
-        return dateOfBirth;
+    public String getDob() {
+        return dob;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setDob(String dob) {
+        this.dob = dob;
     }
 
     public String getRole() {
@@ -204,20 +198,5 @@ public class UserEntity implements Serializable {
 
     public void setContactNumber(String contactNumber) {
         this.contactNumber = contactNumber;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return new EqualsBuilder().append(this, obj).isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(this).hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
     }
 }

@@ -1,11 +1,5 @@
 package com.upgrad.quora.service.entity;
 
-
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -13,10 +7,12 @@ import java.io.Serializable;
 import java.time.ZonedDateTime;
 
 @Entity
-@Table(name = "USER_AUTH_TOKEN", schema = "quora")
-@NamedQueries({
-        @NamedQuery(name = "userAuthTokenByAccessToken" , query = "select ut from UserAuthTokenEntity ut where ut.accessToken = :accessToken")
-})
+@Table(name = "USER_AUTH")
+@NamedQueries(
+        {
+                @NamedQuery(name = "userAuthTokenByAccessToken", query = "select ut from UserAuthTokenEntity ut where ut.accessToken = :accessToken"),
+        }
+)
 public class UserAuthTokenEntity implements Serializable {
 
     @Id
@@ -24,7 +20,8 @@ public class UserAuthTokenEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "UUID")
+    @Column(name = "uuid")
+    @NotNull
     @Size(max = 200)
     private String uuid;
 
@@ -102,20 +99,5 @@ public class UserAuthTokenEntity implements Serializable {
 
     public void setLogoutAt(ZonedDateTime logoutAt) {
         this.logoutAt = logoutAt;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return new EqualsBuilder().append(this, obj).isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(this).hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
     }
 }

@@ -1,48 +1,37 @@
 package com.upgrad.quora.service.entity;
 
-
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.awt.*;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name = "QUESTION", schema = "quora")
+@Table(name = "QUESTION")
 public class QuestionEntity implements Serializable {
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "UUID")
+    @Column(name = "uuid")
+    @NotNull
     @Size(max = 200)
     private String uuid;
 
-    @Column(name = "CONTENT")
+    @Column(name = "content")
+    @NotNull
     @Size(max = 500)
     private String content;
 
-    @Column(name = "DATE")
+    @Column(name = "date")
+    @NotNull
     private ZonedDateTime date;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "USER_ID")
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private UserEntity user;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "question")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<AnswerEntity> answerEntities = new ArrayList<>();
 
     public long getId() {
         return id;
@@ -82,28 +71,5 @@ public class QuestionEntity implements Serializable {
 
     public void setUser(UserEntity user) {
         this.user = user;
-    }
-
-    public List<AnswerEntity> getAnswerEntities() {
-        return answerEntities;
-    }
-
-    public void setAnswerEntities(List<AnswerEntity> answerEntities) {
-        this.answerEntities = answerEntities;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return new EqualsBuilder().append(this, obj).isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(this).hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
     }
 }
