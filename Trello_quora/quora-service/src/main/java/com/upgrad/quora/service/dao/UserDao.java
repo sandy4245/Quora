@@ -25,7 +25,6 @@ public class UserDao {
         }
     }
 
-
     public UserAuthTokenEntity getUserAuthToken(final String accessToken){
         try {
             return entityManager.createNamedQuery("userAuthTokenByAccessToken",UserAuthTokenEntity.class)
@@ -33,6 +32,9 @@ public class UserDao {
         }catch (NoResultException nre){
             return null;
         }
-
     }
-}
+
+    public void deleteUser(final String userUuid){
+        UserEntity userEntity = getUser(userUuid);
+        entityManager.remove(userEntity);
+    }}
