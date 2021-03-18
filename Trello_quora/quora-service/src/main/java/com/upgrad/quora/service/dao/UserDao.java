@@ -45,10 +45,25 @@ public class UserDao {
         entityManager.persist(answerEntity);
         return answerEntity;
     }
+
+    public AnswerEntity editAnswer (AnswerEntity answerEntity){
+        entityManager.merge(answerEntity);
+        return answerEntity;
+    }
     public QuestionEntity getQuestion(final String questionUuid){
         try {
             return entityManager.createNamedQuery("questionByUuid", QuestionEntity.class)
                     .setParameter("uuid", questionUuid)
+                    .getSingleResult();
+        }catch (NoResultException nre){
+            return null;
+        }
+    }
+
+    public AnswerEntity getAnswer(final String answerUuid){
+        try {
+            return entityManager.createNamedQuery("answerByUuid", AnswerEntity.class)
+                    .setParameter("uuid", answerUuid)
                     .getSingleResult();
         }catch (NoResultException nre){
             return null;
