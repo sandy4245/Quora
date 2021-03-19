@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import java.util.List;
 
 @Repository
 public class UserDao {
@@ -65,6 +67,21 @@ public class UserDao {
             return entityManager.createNamedQuery("answerByUuid", AnswerEntity.class)
                     .setParameter("uuid", answerUuid)
                     .getSingleResult();
+        }catch (NoResultException nre){
+            return null;
+        }
+    }
+    public void deleteAnswer(final String AnswerId){
+        AnswerEntity answerEntity = getAnswer(AnswerId);
+        entityManager.remove(answerEntity);
+    }
+
+    public List<AnswerEntity> getAllAnswers (final String questionId){
+        QuestionEntity questionEntity = getQuestion(questionId);
+        try {
+            return entityManager.createNamedQuery("answersByQuesID", AnswerEntity.class)
+                    .setParameter("question_id", questionEntity)
+                    .getResultList();
         }catch (NoResultException nre){
             return null;
         }
